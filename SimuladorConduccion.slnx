@@ -1,3 +1,6 @@
 <Solution>
+  <Project Path="SimuladorConduccion.Core/SimuladorConduccion.Core.csproj" Id="992aeeb7-9252-4739-aa7d-1f27d799dd84" />
+  <Project Path="SimuladorConduccion.Models/SimuladorConduccion.Models.csproj" Id="e91fe83b-3c56-4869-baae-0075dc1ef3ea" />
+  <Project Path="SimuladorConduccion.Web/SimuladorConduccion.Web.csproj" Id="b6a1850d-8bb5-4d26-af1c-0fafbe797662" />
   <Project Path="SimuladorConduccion/SimuladorConduccion.csproj" Id="a004d534-b53b-409c-8c25-1dcb03151e2e" />
 </Solution>

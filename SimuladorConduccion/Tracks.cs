@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace SimuladorConduccion
+namespace SimuladorConduccion.Data
 {
     using System;
     using System.Collections.Generic;
