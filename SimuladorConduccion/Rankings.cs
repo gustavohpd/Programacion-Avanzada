@@ -12,13 +12,13 @@ namespace SimuladorConduccion.Data
     using System;
     using System.Collections.Generic;
     
-    public partial class Tracks
+    public partial class Rankings
     {
-        public int TrackId { get; set; }
-        public string Name { get; set; }
-        public int Lanes { get; set; }
-        public int Length { get; set; }
-        public int Difficulty { get; set; }
-        public bool IsActive { get; set; }
+        public int RankingId { get; set; }
+        public int UsuarioId { get; set; }
+        public int Puntaje { get; set; }
+        public System.DateTime FechaJuego { get; set; }
+    
+        public virtual Usuarios Usuarios { get; set; }
     }
 }

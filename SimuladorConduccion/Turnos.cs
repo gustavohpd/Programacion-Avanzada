@@ -12,13 +12,15 @@ namespace SimuladorConduccion.Data
     using System;
     using System.Collections.Generic;
     
-    public partial class Vehicles
+    public partial class Turnos
     {
-        public int VehicleId { get; set; }
-        public string Name { get; set; }
-        public int MaxSpeed { get; set; }
-        public int Acceleration { get; set; }
-        public int Control { get; set; }
-        public bool IsActive { get; set; }
+        public int TurnoId { get; set; }
+        public int JuegoId { get; set; }
+        public int NumeroTurno { get; set; }
+        public string Accion { get; set; }
+        public int Velocidad { get; set; }
+        public int Carril { get; set; }
+    
+        public virtual Juegos Juegos { get; set; }
     }
 }

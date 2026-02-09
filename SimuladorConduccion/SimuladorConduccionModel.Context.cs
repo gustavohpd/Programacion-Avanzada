@@ -13,10 +13,10 @@ namespace SimuladorConduccion.Data
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class SimuladorConduccionDBEntities : DbContext
+    public partial class SimuladorConduccionDBEntities1 : DbContext
     {
-        public SimuladorConduccionDBEntities()
-            : base("name=SimuladorConduccionDBEntities")
+        public SimuladorConduccionDBEntities1()
+            : base("name=SimuladorConduccionDBEntities1")
         {
         }
     
@@ -25,10 +25,12 @@ namespace SimuladorConduccion.Data
             throw new UnintentionalCodeFirstException();
         }
     
+        public virtual DbSet<Juegos> Juegos { get; set; }
+        public virtual DbSet<Pistas> Pistas { get; set; }
+        public virtual DbSet<Rankings> Rankings { get; set; }
         public virtual DbSet<Roles> Roles { get; set; }
-        public virtual DbSet<Tracks> Tracks { get; set; }
-        public virtual DbSet<UserRoles> UserRoles { get; set; }
-        public virtual DbSet<Users> Users { get; set; }
-        public virtual DbSet<Vehicles> Vehicles { get; set; }
+        public virtual DbSet<Turnos> Turnos { get; set; }
+        public virtual DbSet<Usuarios> Usuarios { get; set; }
+        public virtual DbSet<Vehiculos> Vehiculos { get; set; }
     }
 }

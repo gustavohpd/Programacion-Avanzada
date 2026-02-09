@@ -1,0 +1,515 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="SimuladorConduccionDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Juegos">
+          <Key>
+            <PropertyRef Name="JuegoId" />
+          </Key>
+          <Property Name="JuegoId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UsuarioId" Type="int" Nullable="false" />
+          <Property Name="VehiculoId" Type="int" Nullable="false" />
+          <Property Name="PistaId" Type="int" Nullable="false" />
+          <Property Name="FechaInicio" Type="datetime" Nullable="false" />
+          <Property Name="FechaFin" Type="datetime" />
+          <Property Name="Puntaje" Type="int" />
+          <Property Name="Estado" Type="varchar" MaxLength="20" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Pistas">
+          <Key>
+            <PropertyRef Name="PistaId" />
+          </Key>
+          <Property Name="PistaId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nombre" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Carriles" Type="int" Nullable="false" />
+          <Property Name="Longitud" Type="int" Nullable="false" />
+          <Property Name="Dificultad" Type="int" Nullable="false" />
+          <Property Name="Activo" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Rankings">
+          <Key>
+            <PropertyRef Name="RankingId" />
+          </Key>
+          <Property Name="RankingId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UsuarioId" Type="int" Nullable="false" />
+          <Property Name="Puntaje" Type="int" Nullable="false" />
+          <Property Name="FechaJuego" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Roles">
+          <Key>
+            <PropertyRef Name="RolId" />
+          </Key>
+          <Property Name="RolId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nombre" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Turnos">
+          <Key>
+            <PropertyRef Name="TurnoId" />
+          </Key>
+          <Property Name="TurnoId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="JuegoId" Type="int" Nullable="false" />
+          <Property Name="NumeroTurno" Type="int" Nullable="false" />
+          <Property Name="Accion" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="Velocidad" Type="int" Nullable="false" />
+          <Property Name="Carril" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="UsuarioRoles">
+          <Key>
+            <PropertyRef Name="UsuarioId" />
+            <PropertyRef Name="RolId" />
+          </Key>
+          <Property Name="UsuarioId" Type="int" Nullable="false" />
+          <Property Name="RolId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Usuarios">
+          <Key>
+            <PropertyRef Name="UsuarioId" />
+          </Key>
+          <Property Name="UsuarioId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="NombreUsuario" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="ContrasenaHash" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="Correo" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Activo" Type="bit" Nullable="false" />
+          <Property Name="FechaCreacion" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Vehiculos">
+          <Key>
+            <PropertyRef Name="VehiculoId" />
+          </Key>
+          <Property Name="VehiculoId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nombre" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="VelocidadMaxima" Type="int" Nullable="false" />
+          <Property Name="Aceleracion" Type="int" Nullable="false" />
+          <Property Name="Control" Type="int" Nullable="false" />
+          <Property Name="Activo" Type="bit" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Juegos_Pistas">
+          <End Role="Pistas" Type="Self.Pistas" Multiplicity="1" />
+          <End Role="Juegos" Type="Self.Juegos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Pistas">
+              <PropertyRef Name="PistaId" />
+            </Principal>
+            <Dependent Role="Juegos">
+              <PropertyRef Name="PistaId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Juegos_Usuarios">
+          <End Role="Usuarios" Type="Self.Usuarios" Multiplicity="1" />
+          <End Role="Juegos" Type="Self.Juegos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuarios">
+              <PropertyRef Name="UsuarioId" />
+            </Principal>
+            <Dependent Role="Juegos">
+              <PropertyRef Name="UsuarioId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Juegos_Vehiculos">
+          <End Role="Vehiculos" Type="Self.Vehiculos" Multiplicity="1" />
+          <End Role="Juegos" Type="Self.Juegos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Vehiculos">
+              <PropertyRef Name="VehiculoId" />
+            </Principal>
+            <Dependent Role="Juegos">
+              <PropertyRef Name="VehiculoId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Rankings_Usuarios">
+          <End Role="Usuarios" Type="Self.Usuarios" Multiplicity="1" />
+          <End Role="Rankings" Type="Self.Rankings" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuarios">
+              <PropertyRef Name="UsuarioId" />
+            </Principal>
+            <Dependent Role="Rankings">
+              <PropertyRef Name="UsuarioId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Turnos_Juegos">
+          <End Role="Juegos" Type="Self.Juegos" Multiplicity="1" />
+          <End Role="Turnos" Type="Self.Turnos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Juegos">
+              <PropertyRef Name="JuegoId" />
+            </Principal>
+            <Dependent Role="Turnos">
+              <PropertyRef Name="JuegoId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UsuarioRoles_Roles">
+          <End Role="Roles" Type="Self.Roles" Multiplicity="1" />
+          <End Role="UsuarioRoles" Type="Self.UsuarioRoles" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Roles">
+              <PropertyRef Name="RolId" />
+            </Principal>
+            <Dependent Role="UsuarioRoles">
+              <PropertyRef Name="RolId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UsuarioRoles_Usuarios">
+          <End Role="Usuarios" Type="Self.Usuarios" Multiplicity="1" />
+          <End Role="UsuarioRoles" Type="Self.UsuarioRoles" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuarios">
+              <PropertyRef Name="UsuarioId" />
+            </Principal>
+            <Dependent Role="UsuarioRoles">
+              <PropertyRef Name="UsuarioId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="SimuladorConduccionDBModelStoreContainer">
+          <EntitySet Name="Juegos" EntityType="Self.Juegos" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Pistas" EntityType="Self.Pistas" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Rankings" EntityType="Self.Rankings" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Roles" EntityType="Self.Roles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Turnos" EntityType="Self.Turnos" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UsuarioRoles" EntityType="Self.UsuarioRoles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Usuarios" EntityType="Self.Usuarios" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Vehiculos" EntityType="Self.Vehiculos" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Juegos_Pistas" Association="Self.FK_Juegos_Pistas">
+            <End Role="Pistas" EntitySet="Pistas" />
+            <End Role="Juegos" EntitySet="Juegos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Juegos_Usuarios" Association="Self.FK_Juegos_Usuarios">
+            <End Role="Usuarios" EntitySet="Usuarios" />
+            <End Role="Juegos" EntitySet="Juegos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Juegos_Vehiculos" Association="Self.FK_Juegos_Vehiculos">
+            <End Role="Vehiculos" EntitySet="Vehiculos" />
+            <End Role="Juegos" EntitySet="Juegos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Rankings_Usuarios" Association="Self.FK_Rankings_Usuarios">
+            <End Role="Usuarios" EntitySet="Usuarios" />
+            <End Role="Rankings" EntitySet="Rankings" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Turnos_Juegos" Association="Self.FK_Turnos_Juegos">
+            <End Role="Juegos" EntitySet="Juegos" />
+            <End Role="Turnos" EntitySet="Turnos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UsuarioRoles_Roles" Association="Self.FK_UsuarioRoles_Roles">
+            <End Role="Roles" EntitySet="Roles" />
+            <End Role="UsuarioRoles" EntitySet="UsuarioRoles" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UsuarioRoles_Usuarios" Association="Self.FK_UsuarioRoles_Usuarios">
+            <End Role="Usuarios" EntitySet="Usuarios" />
+            <End Role="UsuarioRoles" EntitySet="UsuarioRoles" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="SimuladorConduccionDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Juegos">
+          <Key>
+            <PropertyRef Name="JuegoId" />
+          </Key>
+          <Property Name="JuegoId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UsuarioId" Type="Int32" Nullable="false" />
+          <Property Name="VehiculoId" Type="Int32" Nullable="false" />
+          <Property Name="PistaId" Type="Int32" Nullable="false" />
+          <Property Name="FechaInicio" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="FechaFin" Type="DateTime" Precision="3" />
+          <Property Name="Puntaje" Type="Int32" />
+          <Property Name="Estado" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Pistas" Relationship="Self.FK_Juegos_Pistas" FromRole="Juegos" ToRole="Pistas" />
+          <NavigationProperty Name="Usuarios" Relationship="Self.FK_Juegos_Usuarios" FromRole="Juegos" ToRole="Usuarios" />
+          <NavigationProperty Name="Vehiculos" Relationship="Self.FK_Juegos_Vehiculos" FromRole="Juegos" ToRole="Vehiculos" />
+          <NavigationProperty Name="Turnos" Relationship="Self.FK_Turnos_Juegos" FromRole="Juegos" ToRole="Turnos" />
+        </EntityType>
+        <EntityType Name="Pistas">
+          <Key>
+            <PropertyRef Name="PistaId" />
+          </Key>
+          <Property Name="PistaId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Carriles" Type="Int32" Nullable="false" />
+          <Property Name="Longitud" Type="Int32" Nullable="false" />
+          <Property Name="Dificultad" Type="Int32" Nullable="false" />
+          <Property Name="Activo" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Juegos" Relationship="Self.FK_Juegos_Pistas" FromRole="Pistas" ToRole="Juegos" />
+        </EntityType>
+        <EntityType Name="Rankings">
+          <Key>
+            <PropertyRef Name="RankingId" />
+          </Key>
+          <Property Name="RankingId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UsuarioId" Type="Int32" Nullable="false" />
+          <Property Name="Puntaje" Type="Int32" Nullable="false" />
+          <Property Name="FechaJuego" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Usuarios" Relationship="Self.FK_Rankings_Usuarios" FromRole="Rankings" ToRole="Usuarios" />
+        </EntityType>
+        <EntityType Name="Roles">
+          <Key>
+            <PropertyRef Name="RolId" />
+          </Key>
+          <Property Name="RolId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Usuarios" Relationship="Self.UsuarioRoles" FromRole="Roles" ToRole="Usuarios" />
+        </EntityType>
+        <EntityType Name="Turnos">
+          <Key>
+            <PropertyRef Name="TurnoId" />
+          </Key>
+          <Property Name="TurnoId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="JuegoId" Type="Int32" Nullable="false" />
+          <Property Name="NumeroTurno" Type="Int32" Nullable="false" />
+          <Property Name="Accion" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Velocidad" Type="Int32" Nullable="false" />
+          <Property Name="Carril" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Juegos" Relationship="Self.FK_Turnos_Juegos" FromRole="Turnos" ToRole="Juegos" />
+        </EntityType>
+        <EntityType Name="Usuarios">
+          <Key>
+            <PropertyRef Name="UsuarioId" />
+          </Key>
+          <Property Name="UsuarioId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NombreUsuario" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ContrasenaHash" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Correo" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Activo" Type="Boolean" Nullable="false" />
+          <Property Name="FechaCreacion" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Juegos" Relationship="Self.FK_Juegos_Usuarios" FromRole="Usuarios" ToRole="Juegos" />
+          <NavigationProperty Name="Rankings" Relationship="Self.FK_Rankings_Usuarios" FromRole="Usuarios" ToRole="Rankings" />
+          <NavigationProperty Name="Roles" Relationship="Self.UsuarioRoles" FromRole="Usuarios" ToRole="Roles" />
+        </EntityType>
+        <EntityType Name="Vehiculos">
+          <Key>
+            <PropertyRef Name="VehiculoId" />
+          </Key>
+          <Property Name="VehiculoId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="VelocidadMaxima" Type="Int32" Nullable="false" />
+          <Property Name="Aceleracion" Type="Int32" Nullable="false" />
+          <Property Name="Control" Type="Int32" Nullable="false" />
+          <Property Name="Activo" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Juegos" Relationship="Self.FK_Juegos_Vehiculos" FromRole="Vehiculos" ToRole="Juegos" />
+        </EntityType>
+        <Association Name="FK_Juegos_Pistas">
+          <End Role="Pistas" Type="Self.Pistas" Multiplicity="1" />
+          <End Role="Juegos" Type="Self.Juegos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Pistas">
+              <PropertyRef Name="PistaId" />
+            </Principal>
+            <Dependent Role="Juegos">
+              <PropertyRef Name="PistaId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Juegos_Usuarios">
+          <End Role="Usuarios" Type="Self.Usuarios" Multiplicity="1" />
+          <End Role="Juegos" Type="Self.Juegos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuarios">
+              <PropertyRef Name="UsuarioId" />
+            </Principal>
+            <Dependent Role="Juegos">
+              <PropertyRef Name="UsuarioId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Juegos_Vehiculos">
+          <End Role="Vehiculos" Type="Self.Vehiculos" Multiplicity="1" />
+          <End Role="Juegos" Type="Self.Juegos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Vehiculos">
+              <PropertyRef Name="VehiculoId" />
+            </Principal>
+            <Dependent Role="Juegos">
+              <PropertyRef Name="VehiculoId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Turnos_Juegos">
+          <End Role="Juegos" Type="Self.Juegos" Multiplicity="1" />
+          <End Role="Turnos" Type="Self.Turnos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Juegos">
+              <PropertyRef Name="JuegoId" />
+            </Principal>
+            <Dependent Role="Turnos">
+              <PropertyRef Name="JuegoId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Rankings_Usuarios">
+          <End Role="Usuarios" Type="Self.Usuarios" Multiplicity="1" />
+          <End Role="Rankings" Type="Self.Rankings" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuarios">
+              <PropertyRef Name="UsuarioId" />
+            </Principal>
+            <Dependent Role="Rankings">
+              <PropertyRef Name="UsuarioId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="UsuarioRoles">
+          <End Role="Roles" Type="Self.Roles" Multiplicity="*" />
+          <End Role="Usuarios" Type="Self.Usuarios" Multiplicity="*" />
+        </Association>
+        <EntityContainer Name="SimuladorConduccionDBEntities1" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Juegos" EntityType="Self.Juegos" />
+          <EntitySet Name="Pistas" EntityType="Self.Pistas" />
+          <EntitySet Name="Rankings" EntityType="Self.Rankings" />
+          <EntitySet Name="Roles" EntityType="Self.Roles" />
+          <EntitySet Name="Turnos" EntityType="Self.Turnos" />
+          <EntitySet Name="Usuarios" EntityType="Self.Usuarios" />
+          <EntitySet Name="Vehiculos" EntityType="Self.Vehiculos" />
+          <AssociationSet Name="FK_Juegos_Pistas" Association="Self.FK_Juegos_Pistas">
+            <End Role="Pistas" EntitySet="Pistas" />
+            <End Role="Juegos" EntitySet="Juegos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Juegos_Usuarios" Association="Self.FK_Juegos_Usuarios">
+            <End Role="Usuarios" EntitySet="Usuarios" />
+            <End Role="Juegos" EntitySet="Juegos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Juegos_Vehiculos" Association="Self.FK_Juegos_Vehiculos">
+            <End Role="Vehiculos" EntitySet="Vehiculos" />
+            <End Role="Juegos" EntitySet="Juegos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Turnos_Juegos" Association="Self.FK_Turnos_Juegos">
+            <End Role="Juegos" EntitySet="Juegos" />
+            <End Role="Turnos" EntitySet="Turnos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Rankings_Usuarios" Association="Self.FK_Rankings_Usuarios">
+            <End Role="Usuarios" EntitySet="Usuarios" />
+            <End Role="Rankings" EntitySet="Rankings" />
+          </AssociationSet>
+          <AssociationSet Name="UsuarioRoles" Association="Self.UsuarioRoles">
+            <End Role="Roles" EntitySet="Roles" />
+            <End Role="Usuarios" EntitySet="Usuarios" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="SimuladorConduccionDBModelStoreContainer" CdmEntityContainer="SimuladorConduccionDBEntities1">
+          <EntitySetMapping Name="Juegos">
+            <EntityTypeMapping TypeName="SimuladorConduccionDBModel.Juegos">
+              <MappingFragment StoreEntitySet="Juegos">
+                <ScalarProperty Name="JuegoId" ColumnName="JuegoId" />
+                <ScalarProperty Name="UsuarioId" ColumnName="UsuarioId" />
+                <ScalarProperty Name="VehiculoId" ColumnName="VehiculoId" />
+                <ScalarProperty Name="PistaId" ColumnName="PistaId" />
+                <ScalarProperty Name="FechaInicio" ColumnName="FechaInicio" />
+                <ScalarProperty Name="FechaFin" ColumnName="FechaFin" />
+                <ScalarProperty Name="Puntaje" ColumnName="Puntaje" />
+                <ScalarProperty Name="Estado" ColumnName="Estado" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Pistas">
+            <EntityTypeMapping TypeName="SimuladorConduccionDBModel.Pistas">
+              <MappingFragment StoreEntitySet="Pistas">
+                <ScalarProperty Name="PistaId" ColumnName="PistaId" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Carriles" ColumnName="Carriles" />
+                <ScalarProperty Name="Longitud" ColumnName="Longitud" />
+                <ScalarProperty Name="Dificultad" ColumnName="Dificultad" />
+                <ScalarProperty Name="Activo" ColumnName="Activo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Rankings">
+            <EntityTypeMapping TypeName="SimuladorConduccionDBModel.Rankings">
+              <MappingFragment StoreEntitySet="Rankings">
+                <ScalarProperty Name="RankingId" ColumnName="RankingId" />
+                <ScalarProperty Name="UsuarioId" ColumnName="UsuarioId" />
+                <ScalarProperty Name="Puntaje" ColumnName="Puntaje" />
+                <ScalarProperty Name="FechaJuego" ColumnName="FechaJuego" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Roles">
+            <EntityTypeMapping TypeName="SimuladorConduccionDBModel.Roles">
+              <MappingFragment StoreEntitySet="Roles">
+                <ScalarProperty Name="RolId" ColumnName="RolId" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Turnos">
+            <EntityTypeMapping TypeName="SimuladorConduccionDBModel.Turnos">
+              <MappingFragment StoreEntitySet="Turnos">
+                <ScalarProperty Name="TurnoId" ColumnName="TurnoId" />
+                <ScalarProperty Name="JuegoId" ColumnName="JuegoId" />
+                <ScalarProperty Name="NumeroTurno" ColumnName="NumeroTurno" />
+                <ScalarProperty Name="Accion" ColumnName="Accion" />
+                <ScalarProperty Name="Velocidad" ColumnName="Velocidad" />
+                <ScalarProperty Name="Carril" ColumnName="Carril" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Usuarios">
+            <EntityTypeMapping TypeName="SimuladorConduccionDBModel.Usuarios">
+              <MappingFragment StoreEntitySet="Usuarios">
+                <ScalarProperty Name="UsuarioId" ColumnName="UsuarioId" />
+                <ScalarProperty Name="NombreUsuario" ColumnName="NombreUsuario" />
+                <ScalarProperty Name="ContrasenaHash" ColumnName="ContrasenaHash" />
+                <ScalarProperty Name="Correo" ColumnName="Correo" />
+                <ScalarProperty Name="Activo" ColumnName="Activo" />
+                <ScalarProperty Name="FechaCreacion" ColumnName="FechaCreacion" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Vehiculos">
+            <EntityTypeMapping TypeName="SimuladorConduccionDBModel.Vehiculos">
+              <MappingFragment StoreEntitySet="Vehiculos">
+                <ScalarProperty Name="VehiculoId" ColumnName="VehiculoId" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="VelocidadMaxima" ColumnName="VelocidadMaxima" />
+                <ScalarProperty Name="Aceleracion" ColumnName="Aceleracion" />
+                <ScalarProperty Name="Control" ColumnName="Control" />
+                <ScalarProperty Name="Activo" ColumnName="Activo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="UsuarioRoles" TypeName="SimuladorConduccionDBModel.UsuarioRoles" StoreEntitySet="UsuarioRoles">
+            <EndProperty Name="Roles">
+              <ScalarProperty Name="RolId" ColumnName="RolId" />
+            </EndProperty>
+            <EndProperty Name="Usuarios">
+              <ScalarProperty Name="UsuarioId" ColumnName="UsuarioId" />
+            </EndProperty>
+          </AssociationSetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

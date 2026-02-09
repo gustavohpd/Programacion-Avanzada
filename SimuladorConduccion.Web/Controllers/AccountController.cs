@@ -11,7 +11,12 @@ namespace SimuladorConduccion.Web.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly LoginService _loginService = new LoginService();
+        private readonly LoginService _loginService;
+
+        public AccountController()
+        {
+            _loginService = new LoginService();
+        }
 
         [HttpGet]
         public ActionResult Login()
@@ -20,18 +25,36 @@ namespace SimuladorConduccion.Web.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Login(LoginViewModel model)
         {
-            var user = _loginService.Validate(model.Username, model.Password);
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
 
-            if (user == null)
+            var usuario = _loginService.ValidarUsuario(
+                model.NombreUsuario,
+                model.Contrasena
+            );
+
+            if (usuario == null)
             {
                 model.Error = "Usuario o contraseña incorrectos";
                 return View(model);
             }
 
-            Session["User"] = user.Username;
+            // Guardar sesión básica
+            Session["UsuarioId"] = usuario.UsuarioId;
+            Session["NombreUsuario"] = usuario.NombreUsuario;
+
             return RedirectToAction("Index", "Home");
+        }
+
+        public ActionResult Logout()
+        {
+            Session.Clear();
+            return RedirectToAction("Login");
         }
     }
 }

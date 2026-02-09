@@ -12,22 +12,22 @@ namespace SimuladorConduccion.Data
     using System;
     using System.Collections.Generic;
     
-    public partial class Users
+    public partial class Vehiculos
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Users()
+        public Vehiculos()
         {
-            this.UserRoles = new HashSet<UserRoles>();
+            this.Juegos = new HashSet<Juegos>();
         }
     
-        public int UserId { get; set; }
-        public string Username { get; set; }
-        public string PasswordHash { get; set; }
-        public string Email { get; set; }
-        public bool IsActive { get; set; }
-        public System.DateTime CreatedAt { get; set; }
+        public int VehiculoId { get; set; }
+        public string Nombre { get; set; }
+        public int VelocidadMaxima { get; set; }
+        public int Aceleracion { get; set; }
+        public int Control { get; set; }
+        public bool Activo { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<UserRoles> UserRoles { get; set; }
+        public virtual ICollection<Juegos> Juegos { get; set; }
     }
 }

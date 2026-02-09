@@ -1,24 +1,23 @@
-﻿using SimuladorConduccion.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using SimuladorConduccion.Models;
 
 
 namespace SimuladorConduccion.Data
 {
     public class UserRepository
     {
-        public User GetUser(string username, string passwordHash)
+        public Usuarios ObtenerUsuario(string nombreUsuario, string contrasenaHash)
         {
-            using (var db = new SimuladorConduccionDb())
+            using (var db = new SimuladorConduccionDBEntities1())
             {
-                return db.Users.FirstOrDefault(u =>
-                    u.Username == username &&
-                    u.PasswordHash == passwordHash &&
-                    u.IsActive);
+                return db.Usuarios.FirstOrDefault(u =>
+                    u.NombreUsuario == nombreUsuario &&
+                    u.ContrasenaHash == contrasenaHash &&
+                    u.Activo
+                );
             }
         }
     }

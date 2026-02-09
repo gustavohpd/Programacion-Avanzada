@@ -1,5 +1,4 @@
 ﻿using SimuladorConduccion.Data;
-using SimuladorConduccion.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,20 +10,15 @@ namespace SimuladorConduccion.Core
 {
     public class LoginService
     {
-        private readonly UserRepository _repo = new UserRepository();
-
-        public User Validate(string username, string password)
+        public Usuarios ValidarUsuario(string nombreUsuario, string contrasena)
         {
-            string hash = HashPassword(password);
-            return _repo.GetUser(username, hash);
-        }
-
-        private string HashPassword(string password)
-        {
-            using (SHA256 sha = SHA256.Create())
+            using (var db = new SimuladorConduccionDBEntities1())
             {
-                var bytes = sha.ComputeHash(Encoding.UTF8.GetBytes(password));
-                return Convert.ToBase64String(bytes);
+                return db.Usuarios.FirstOrDefault(u =>
+                    u.NombreUsuario == nombreUsuario &&
+                    u.ContrasenaHash == contrasena &&
+                    u.Activo
+                );
             }
         }
     }
