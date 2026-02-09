@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Class1.cs" />
+    <Compile Include="LoginService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -49,9 +50,9 @@
       <Project>{e91fe83b-3c56-4869-baae-0075dc1ef3ea}</Project>
       <Name>SimuladorConduccion.Models</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SimuladorConduccion\SimuladorConduccion.csproj">
+    <ProjectReference Include="..\SimuladorConduccion\SimuladorConduccion.Data.csproj">
       <Project>{a004d534-b53b-409c-8c25-1dcb03151e2e}</Project>
-      <Name>SimuladorConduccion</Name>
+      <Name>SimuladorConduccion.Data</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
