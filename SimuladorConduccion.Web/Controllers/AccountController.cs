@@ -1,11 +1,6 @@
 ﻿using SimuladorConduccion.Core;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using SimuladorConduccion.Web.ViewModels;
-
 
 namespace SimuladorConduccion.Web.Controllers
 {
@@ -44,8 +39,8 @@ namespace SimuladorConduccion.Web.Controllers
                 return View(model);
             }
 
-            // Guardar sesión básica
-            Session["UsuarioId"] = usuario.UsuarioId;
+            // Guardar sesión
+            Session["UsuarioId"] = usuario.IdUsuario;
             Session["NombreUsuario"] = usuario.NombreUsuario;
 
             return RedirectToAction("Index", "Home");

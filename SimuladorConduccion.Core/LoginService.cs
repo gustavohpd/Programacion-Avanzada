@@ -1,25 +1,43 @@
-﻿using SimuladorConduccion.Data;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MySql.Data.MySqlClient;
 
 namespace SimuladorConduccion.Core
 {
     public class LoginService
     {
-        public Usuarios ValidarUsuario(string nombreUsuario, string contrasena)
+        private string connectionString =
+            "server=localhost;database=SimuladorConduccion;uid=root;pwd=;";
+
+        public UsuarioLogin ValidarUsuario(string nombreUsuario, string contrasena)
         {
-            using (var db = new SimuladorConduccionDBEntities1())
+            UsuarioLogin usuario = null;
+
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
             {
-                return db.Usuarios.FirstOrDefault(u =>
-                    u.NombreUsuario == nombreUsuario &&
-                    u.ContrasenaHash == contrasena &&
-                    u.Activo
-                );
+                conn.Open();
+
+                string query = @"SELECT IdUsuario, NombreUsuario 
+                                 FROM Usuarios 
+                                 WHERE NombreUsuario=@user 
+                                 AND ContrasenaHash=@pass 
+                                 AND Activo=1";
+
+                MySqlCommand cmd = new MySqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@user", nombreUsuario);
+                cmd.Parameters.AddWithValue("@pass", contrasena);
+
+                var reader = cmd.ExecuteReader();
+
+                if (reader.Read())
+                {
+                    usuario = new UsuarioLogin
+                    {
+                        IdUsuario = (int)reader["IdUsuario"],
+                        NombreUsuario = reader["NombreUsuario"].ToString()
+                    };
+                }
             }
+
+            return usuario;
         }
     }
 }
