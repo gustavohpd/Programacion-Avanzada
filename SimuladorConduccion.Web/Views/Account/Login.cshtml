@@ -1,23 +1,55 @@
 ﻿@model SimuladorConduccion.Web.ViewModels.LoginViewModel
-
 @{
     Layout = null;
 }
 
 <!DOCTYPE html>
-
 <html>
 <head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Iniciar Sesion</title>
-
-    <link rel="stylesheet" href="~/Styles/LoginStyle.css" />
-
+    <meta charset="utf-8" />
+    <title>Simulador</title>
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Styles/LoginStyle.css" rel="stylesheet" />
 </head>
-<body>
-    <div class="login-box">
-        <h2>Login</h2>
 
+<body>
+
+    <div class="login-container">
+        <div class="login-box">
+
+            <h1 class="title">🏁 SIMULADOR</h1>
+
+            <!-- LOGIN -->
+            <h3 class="subtitle">Iniciar Sesión</h3>
+
+            @using (Html.BeginForm("Login", "Account", FormMethod.Post))
+            {
+                @Html.TextBoxFor(m => m.NombreUsuario, new { @class = "input", placeholder = "Usuario" })
+                @Html.PasswordFor(m => m.Contrasena, new { @class = "input", placeholder = "Contraseña" })
+
+                <button type="submit" class="btn-login">🚗 INICIAR</button>
+            }
+
+            <!-- REGISTRO -->
+            <h3 class="subtitle" style="margin-top:20px;">Registrarse</h3>
+
+            @using (Html.BeginForm("Registrar", "Account", FormMethod.Post))
+            {
+                @Html.TextBoxFor(m => m.NombreUsuario, new { @class = "input", placeholder = "Usuario nuevo" })
+                @Html.PasswordFor(m => m.Contrasena, new { @class = "input", placeholder = "Contraseña nueva" })
+                @Html.TextBoxFor(m => m.Correo, new { @class = "input", placeholder = "Correo" })
+
+                <button type="submit" class="btn-login">📝 REGISTRAR</button>
+            }
+
+            <!-- ERROR -->
+            @if (!string.IsNullOrEmpty(Model?.Error))
+            {
+                <p style="color:red;">@Model.Error</p>
+            }
+
+        </div>
     </div>
+
 </body>
 </html>

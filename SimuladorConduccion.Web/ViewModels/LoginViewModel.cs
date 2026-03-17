@@ -14,6 +14,8 @@ namespace SimuladorConduccion.Web.ViewModels
         [Required]
         public string Contrasena { get; set; }
 
+        public string Correo { get; set; }
+
         public string Error { get; set; }
     }
 }
