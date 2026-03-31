@@ -1,0 +1,276 @@
+﻿@{
+    ViewBag.Title = "Gameplay";
+}
+
+<h2>🏁 Carrera en progreso</h2>
+
+<div>
+    Tiempo: <span id="tiempo">0</span> s |
+    Puntaje: <span id="puntaje">0</span>
+    <h3> Monedas: <span id="monedas">0</span></h3>
+</div>
+
+<!-- PISTA -->
+<div id="pista">
+    <div id="carro">🚗</div>
+    <div id="meta">🏁</div>
+</div>
+
+<!-- AUDIO -->
+<audio id="motor" loop>
+    <source src="https://www.soundjay.com/mechanical/sounds/car-engine-1.mp3" type="audio/mpeg">
+    <audio id="musica" loop autoplay>
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+    </audio>
+</audio>
+
+<style>
+        body {
+            background: black;
+            color: white;
+            text-align: center;
+        }
+
+        #pista {
+            width: 95%;
+            height: 350px;
+            margin: auto;
+            border: 5px solid white;
+            position: relative;
+            overflow: hidden;
+            border-radius: 20px;
+            background: #2c2c2c;
+        }
+
+        #carro {
+            position: absolute;
+            left: 50px;
+            top: 140px;
+            font-size: 60px;
+        }
+
+        #meta {
+            position: absolute;
+            right: 30px;
+            top: 140px;
+            font-size: 50px;
+        }
+
+        .obstaculo {
+            position: absolute;
+            font-size: 40px;
+        }
+
+        .moneda {
+            position: absolute;
+            font-size: 30px;
+            animation: girar 1s infinite linear;
+        }
+    @@keyframes
+        girar {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+</style>
+
+<script>
+    let carro = document.getElementById("carro");
+    let pista = document.getElementById("pista");
+    let motor = document.getElementById("motor");
+
+    let monedasRecolectadas = 0;
+    let monedas = [];
+    let obstaculos = [];
+
+    let x = 50;
+    let y = 140;
+    let velocidad = 10;
+    let tiempo = 0;
+    let jugando = true;
+
+    motor.volume = 0.3;
+
+    
+    let dificultadTexto = "@Session["Dificultad"]";
+    let dificultad = 1;
+
+    if (dificultadTexto == "Facil") dificultad = 1;
+    if (dificultadTexto == "Media") dificultad = 2;
+    if (dificultadTexto == "Dificil") dificultad = 3;
+
+
+    //  TIEMPO
+    setInterval(() => {
+        if (jugando) {
+            tiempo++;
+            document.getElementById("tiempo").innerText = tiempo;
+        }
+    }, 1000);
+
+    
+
+    //  CONTROLES
+    document.addEventListener("keydown", function (e) {
+
+        if (!jugando) return;
+
+        motor.play();
+
+        if (e.key === "ArrowRight") x += velocidad;
+        if (e.key === "ArrowLeft") x -= velocidad;
+        if (e.key === "ArrowUp") y -= 50;
+        if (e.key === "ArrowDown") y += 50;
+
+        if (y < 20) y = 20;
+        if (y > 250) y = 250;
+
+        carro.style.left = x + "px";
+        carro.style.top = y + "px";
+
+        verificarColision();
+        verificarMonedas();
+        verificarMeta();
+    });
+
+    //  OBSTÁCULOS
+    function crearObstaculo() {
+        let obs = document.createElement("div");
+        obs.classList.add("obstaculo");
+        obs.innerHTML = "🚧";
+
+        let carriles = [60, 140, 220];
+        let randomY = carriles[Math.floor(Math.random() * carriles.length)];
+
+        obs.style.left = "90%";
+        obs.style.top = randomY + "px";
+
+        pista.appendChild(obs);
+        obstaculos.push(obs);
+
+        let mover = setInterval(() => {
+            let pos = obs.offsetLeft;
+            obs.style.left = (pos - 5) + "px";
+
+            if (pos < 0) {
+                obs.remove();
+                clearInterval(mover);
+            }
+        }, 30);
+    }
+
+    setInterval(() => {
+        if (jugando) crearObstaculo();
+    }, 1500);
+
+    //  MONEDAS
+    function crearMoneda() {
+        let moneda = document.createElement("div");
+        moneda.classList.add("moneda");
+        moneda.innerHTML = "💰";
+
+        let carriles = [60, 140, 220];
+        let yMoneda = carriles[Math.floor(Math.random() * carriles.length)];
+
+        moneda.style.left = "90%";
+        moneda.style.top = yMoneda + "px";
+
+        pista.appendChild(moneda);
+        monedas.push(moneda);
+
+        let mover = setInterval(() => {
+            let pos = moneda.offsetLeft;
+            moneda.style.left = (pos - 5) + "px";
+
+            if (pos < 0) {
+                moneda.remove();
+                clearInterval(mover);
+            }
+        }, 30);
+    }
+
+    setInterval(() => {
+        if (jugando) crearMoneda();
+    }, 1200);
+
+    // COLISIÓN OBSTÁCULOS
+    function verificarColision() {
+        let carroRect = carro.getBoundingClientRect();
+
+        obstaculos.forEach(o => {
+            let rect = o.getBoundingClientRect();
+
+            //  HITBOX MÁS PEQUEÑO (NO MUERE SIN TOCAR)
+            if (
+                carroRect.left + 20 < rect.right &&
+                carroRect.right - 20 > rect.left &&
+                carroRect.top + 20 < rect.bottom &&
+                carroRect.bottom - 20 > rect.top
+            ) {
+                perder();
+            }
+        });
+    }
+
+    //  COLISIÓN MONEDAS
+    function verificarMonedas() {
+        let carroRect = carro.getBoundingClientRect();
+
+        monedas.forEach((m, index) => {
+            let rect = m.getBoundingClientRect();
+
+            if (
+                carroRect.left + 20 < rect.right &&
+                carroRect.right - 20 > rect.left &&
+                carroRect.top + 20 < rect.bottom &&
+                carroRect.bottom - 20 > rect.top
+            ) {
+                m.remove();
+                monedas.splice(index, 1);
+
+                monedasRecolectadas++;
+                document.getElementById("monedas").innerText = monedasRecolectadas;
+            }
+        });
+    }
+
+    //  META
+    function verificarMeta() {
+        if (x > pista.offsetWidth - 120) {
+            ganar();
+        }
+    }
+
+    function ganar() {
+        jugando = false;
+        motor.pause();
+
+        let puntaje = Math.max(1000 - (tiempo * 10), 100) + monedasRecolectadas;
+
+        guardarPuntaje(puntaje);
+
+        alert("🏆 Ganaste! Puntaje: " + puntaje + " 💰: " + monedasRecolectadas);
+
+        window.location.href = "/Home/Ranking";
+    }
+
+    function perder() {
+        jugando = false;
+        motor.pause();
+
+        alert("💀 Game Over");
+        window.location.href = "/Home/GameOver";
+    }
+
+    function guardarPuntaje(puntaje) {
+        fetch('/Home/GuardarPuntaje', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ puntaje: puntaje })
+        });
+    }
+</script>

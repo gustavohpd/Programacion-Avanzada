@@ -1,33 +1,80 @@
 ﻿@{
-    ViewBag.Title = "Home Page";
+    ViewBag.Title = "Inicio";
 }
 
-<main>
-    <section class="row" aria-labelledby="aspnetTitle">
-        <h1 id="title">ASP.NET</h1>
-        <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
-        <p><a href="https://asp.net" class="btn btn-primary btn-md">Learn more &raquo;</a></p>
-    </section>
+<h1>🏁 SIMULADOR</h1>
+<h2>👤 Bienvenido, @Session["Usuario"]</h2>
 
-    <div class="row">
-        <section class="col-md-4" aria-labelledby="gettingStartedTitle">
-            <h2 id="gettingStartedTitle">Getting started</h2>
-            <p>
-                ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
-                enables a clean separation of concerns and gives you full control over markup
-                for enjoyable, agile development.
-            </p>
-            <p><a class="btn btn-outline-dark" href="https://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
-        </section>
-        <section class="col-md-4" aria-labelledby="librariesTitle">
-            <h2 id="librariesTitle">Get more libraries</h2>
-            <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
-            <p><a class="btn btn-outline-dark" href="https://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a></p>
-        </section>
-        <section class="col-md-4" aria-labelledby="hostingTitle">
-            <h2 id="hostingTitle">Web Hosting</h2>
-            <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
-            <p><a class="btn btn-outline-dark" href="https://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
-        </section>
-    </div>
-</main>
+<h3>🚗 Elige tu vehículo</h3>
+
+<div class="contenedor">
+    @foreach (var v in ViewBag.Vehiculos)
+    {
+        <form method="post" action="/Home/SeleccionarVehiculo">
+            <div class="card">
+                <h3>@v.Nombre</h3>
+                <p>⚡ Velocidad: @v.Velocidad</p>
+
+                <input type="hidden" name="idVehiculo" value="@v.IdVehiculo" />
+                <input type="hidden" name="velocidad" value="@v.Velocidad" />
+
+                <button type="submit">JUGAR</button>
+            </div>
+        </form>
+    }
+</div>
+
+<a href="/Home/Ranking">
+    <button class="ranking"> Ver Ranking</button>
+</a>
+
+<style>
+    body {
+        background: black;
+        color: white;
+        text-align: center;
+        font-family: Arial;
+    }
+
+    .contenedor {
+        display: flex;
+        justify-content: center;
+        gap: 30px;
+        margin-top: 40px;
+    }
+
+    .card {
+        background: #222;
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 0 20px cyan;
+        width: 200px;
+        transition: 0.3s;
+    }
+
+        .card:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 30px lime;
+        }
+
+    button {
+        margin-top: 10px;
+        padding: 10px;
+        background: cyan;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+    }
+
+        button:hover {
+            background: lime;
+        }
+
+    .ranking {
+        margin-top: 40px;
+        padding: 15px;
+        background: gold;
+        color: black;
+        font-weight: bold;
+    }
+</style>

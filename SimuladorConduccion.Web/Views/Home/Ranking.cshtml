@@ -1,0 +1,120 @@
+﻿@{
+    ViewBag.Title = "Ranking";
+}
+
+<h2 class="titulo">🏆 TOP 10 JUGADORES</h2>
+
+<div class="contenedor">
+    <table class="tabla-ranking">
+        <tr>
+            <th>#</th>
+            <th>Jugador</th>
+            <th>Puntaje</th>
+            <th>Monedas</th>
+        </tr>
+
+        @{
+            int pos = 1;
+        }
+
+        @foreach (var r in ViewBag.Ranking)
+        {
+            <tr class="fila">
+                <td>@pos</td>
+                <td>@r.NombreUsuario</td>
+                <td>🔥 @r.PuntajeTotal</td>
+                <td>💰 @r.Monedas</td>
+            </tr>
+            pos++;
+        }
+    </table>
+</div>
+
+<div class="botones">
+    <a href="/Home/Index">
+        <button class="btn">🔄 Volver a jugar</button>
+    </a>
+</div>
+
+<style>
+    body {
+        background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: white;
+        text-align: center;
+    }
+
+    .titulo {
+        font-size: 40px;
+        margin-top: 20px;
+        text-shadow: 0 0 15px gold;
+    }
+
+    .contenedor {
+        display: flex;
+        justify-content: center;
+        margin-top: 30px;
+    }
+
+    .tabla-ranking {
+        width: 60%;
+        border-collapse: collapse;
+        background: rgba(255,255,255,0.05);
+        border-radius: 15px;
+        overflow: hidden;
+        backdrop-filter: blur(10px);
+        box-shadow: 0 0 25px rgba(0,255,204,0.3);
+    }
+
+        .tabla-ranking th {
+            background: linear-gradient(45deg, gold, orange);
+            color: black;
+            padding: 15px;
+            font-size: 18px;
+        }
+
+        .tabla-ranking td {
+            padding: 12px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+    .fila:hover {
+        background: rgba(0,255,204,0.2);
+        transform: scale(1.02);
+        transition: 0.3s;
+    }
+
+    /*  TOP 3 */
+    .tabla-ranking tr:nth-child(2) {
+        background: rgba(255, 215, 0, 0.2);
+        font-weight: bold;
+    }
+
+    .tabla-ranking tr:nth-child(3) {
+        background: rgba(192, 192, 192, 0.2);
+        font-weight: bold;
+    }
+
+    .tabla-ranking tr:nth-child(4) {
+        background: rgba(205, 127, 50, 0.2);
+        font-weight: bold;
+    }
+
+    .btn {
+        margin-top: 30px;
+        padding: 15px 40px;
+        font-size: 18px;
+        background: linear-gradient(45deg, #00ffcc, #00bfff);
+        color: black;
+        border: none;
+        border-radius: 12px;
+        cursor: pointer;
+        font-weight: bold;
+        transition: 0.3s;
+    }
+
+        .btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 20px #00ffcc;
+        }
+</style>
