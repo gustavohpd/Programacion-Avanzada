@@ -2,7 +2,7 @@
     ViewBag.Title = "Gameplay";
 }
 
-<h2>🏁 Carrera en progreso</h2>
+<h2> Carrera en progreso</h2>
 
 <div>
     Tiempo: <span id="tiempo">0</span> s |
@@ -25,63 +25,70 @@
 </audio>
 
 <style>
-        body {
-            background: black;
-            color: white;
-            text-align: center;
+    body {
+        background: black;
+        color: white;
+        text-align: center;
+    }
+
+
+    #pista {
+        width: 95%;
+        height: 350px;
+        margin: auto;
+        border: 5px solid white;
+        position: relative;
+        overflow: hidden;
+        border-radius: 20px;
+        background-color: black; /* fallback */
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+    }
+
+    #carro {
+        position: absolute;
+        left: 50px;
+        top: 140px;
+        font-size: 60px;
+    }
+
+    #meta {
+        position: absolute;
+        right: 30px;
+        top: 140px;
+        font-size: 50px;
+    }
+
+    .obstaculo {
+        position: absolute;
+        font-size: 40px;
+    }
+
+    .moneda {
+        position: absolute;
+        font-size: 30px;
+        animation: girar 1s infinite linear;
+    }
+
+    @@keyframes girar {
+        0% {
+            transform: rotate(0deg);
         }
 
-        #pista {
-            width: 95%;
-            height: 350px;
-            margin: auto;
-            border: 5px solid white;
-            position: relative;
-            overflow: hidden;
-            border-radius: 20px;
-            background: #2c2c2c;
+        100% {
+            transform: rotate(360deg);
         }
-
-        #carro {
-            position: absolute;
-            left: 50px;
-            top: 140px;
-            font-size: 60px;
-        }
-
-        #meta {
-            position: absolute;
-            right: 30px;
-            top: 140px;
-            font-size: 50px;
-        }
-
-        .obstaculo {
-            position: absolute;
-            font-size: 40px;
-        }
-
-        .moneda {
-            position: absolute;
-            font-size: 30px;
-            animation: girar 1s infinite linear;
-        }
-    @@keyframes
-        girar {
-            0% {
-                transform: rotate(0deg);
-            }
-
-            100% {
-                transform: rotate(360deg);
-            }
-        }
+    }
 </style>
 
 <script>
     let carro = document.getElementById("carro");
-    let pista = document.getElementById("pista");
+    let pistaDiv = document.getElementById("pista"); // 🔥 CAMBIO DE NOMBRE
     let motor = document.getElementById("motor");
+
+    let pista = '@Session["Pista"]';
+    let velocidad = @Convert.ToInt32(Session["Velocidad"] ?? 10);
 
     let monedasRecolectadas = 0;
     let monedas = [];
@@ -89,22 +96,19 @@
 
     let x = 50;
     let y = 140;
-    let velocidad = 10;
     let tiempo = 0;
     let jugando = true;
 
     motor.volume = 0.3;
 
-    
-    let dificultadTexto = "@Session["Dificultad"]";
+    let dificultadTexto = '@Session["Dificultad"]';
     let dificultad = 1;
 
     if (dificultadTexto == "Facil") dificultad = 1;
     if (dificultadTexto == "Media") dificultad = 2;
     if (dificultadTexto == "Dificil") dificultad = 3;
 
-
-    //  TIEMPO
+    // TIEMPO
     setInterval(() => {
         if (jugando) {
             tiempo++;
@@ -112,9 +116,7 @@
         }
     }, 1000);
 
-    
-
-    //  CONTROLES
+    // CONTROLES
     document.addEventListener("keydown", function (e) {
 
         if (!jugando) return;
@@ -137,7 +139,7 @@
         verificarMeta();
     });
 
-    //  OBSTÁCULOS
+    // OBSTÁCULOS
     function crearObstaculo() {
         let obs = document.createElement("div");
         obs.classList.add("obstaculo");
@@ -149,12 +151,12 @@
         obs.style.left = "90%";
         obs.style.top = randomY + "px";
 
-        pista.appendChild(obs);
+        pistaDiv.appendChild(obs);
         obstaculos.push(obs);
 
         let mover = setInterval(() => {
             let pos = obs.offsetLeft;
-            obs.style.left = (pos - 5) + "px";
+            obs.style.left = (pos - (5 * dificultad)) + "px";
 
             if (pos < 0) {
                 obs.remove();
@@ -165,9 +167,9 @@
 
     setInterval(() => {
         if (jugando) crearObstaculo();
-    }, 1500);
+    }, 1500 / dificultad);
 
-    //  MONEDAS
+    // MONEDAS
     function crearMoneda() {
         let moneda = document.createElement("div");
         moneda.classList.add("moneda");
@@ -179,7 +181,7 @@
         moneda.style.left = "90%";
         moneda.style.top = yMoneda + "px";
 
-        pista.appendChild(moneda);
+        pistaDiv.appendChild(moneda);
         monedas.push(moneda);
 
         let mover = setInterval(() => {
@@ -197,14 +199,13 @@
         if (jugando) crearMoneda();
     }, 1200);
 
-    // COLISIÓN OBSTÁCULOS
+    // COLISIONES
     function verificarColision() {
         let carroRect = carro.getBoundingClientRect();
 
         obstaculos.forEach(o => {
             let rect = o.getBoundingClientRect();
 
-            //  HITBOX MÁS PEQUEÑO (NO MUERE SIN TOCAR)
             if (
                 carroRect.left + 20 < rect.right &&
                 carroRect.right - 20 > rect.left &&
@@ -216,7 +217,6 @@
         });
     }
 
-    //  COLISIÓN MONEDAS
     function verificarMonedas() {
         let carroRect = carro.getBoundingClientRect();
 
@@ -238,9 +238,32 @@
         });
     }
 
-    //  META
+    // FONDO
+
+    function aplicarFondo() {
+        let pistaDiv = document.getElementById("pista");
+
+        console.log("Pista:", pista);
+
+        if (pista == "1") {
+            pistaDiv.style.backgroundImage = "url('https://images.unsplash.com/photo-1503376780353-7e6692767b70')";
+        }
+        else if (pista == "2") {
+            pistaDiv.style.backgroundImage = "url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee')";
+        }
+        else if (pista == "3") {
+            pistaDiv.style.backgroundImage = "url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e')";
+        }
+        else {
+            pistaDiv.style.backgroundColor = "#333";
+        }
+    }
+
+    aplicarFondo();
+
+    // META
     function verificarMeta() {
-        if (x > pista.offsetWidth - 120) {
+        if (x > pistaDiv.offsetWidth - 120) {
             ganar();
         }
     }
@@ -253,16 +276,18 @@
 
         guardarPuntaje(puntaje);
 
-        alert("🏆 Ganaste! Puntaje: " + puntaje + " 💰: " + monedasRecolectadas);
-
-        window.location.href = "/Home/Ranking";
+        
+        window.location.href = `/Home/Victory?puntaje=${puntaje}&monedas=${monedasRecolectadas}`;
     }
 
     function perder() {
         jugando = false;
         motor.pause();
 
-        alert("💀 Game Over");
+        let puntaje = Math.max(1000 - (tiempo * 10), 100) + monedasRecolectadas;
+
+        guardarPuntaje(puntaje);
+
         window.location.href = "/Home/GameOver";
     }
 

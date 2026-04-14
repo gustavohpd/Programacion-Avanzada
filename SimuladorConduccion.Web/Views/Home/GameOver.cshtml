@@ -1,16 +1,126 @@
 ﻿
 @{
-    ViewBag.Title = "GameOver";
+    ViewBag.Title = "Game Over";
 }
 
-<h1 style="color:red;">💀 GAME OVER</h1>
+<div class="gameover-container">
 
-<h3>Perdiste la carrera</h3>
+    <h1> GAME OVER</h1>
 
-<a href="/Home/Index">
-    <button>🔄 Volver a jugar</button>
-</a>
+    <p class="mensaje">😵 Chocaste contra un obstáculo</p>
 
-<a href="/Home/Ranking">
-    <button>🏆 Ver Ranking</button>
-</a>
+    <h2 class="puntaje">
+         Puntaje: @Session["UltimoPuntaje"]
+    </h2>
+
+    <div class="botones">
+
+        <a href="/Home/Gameplay">
+            <button class="btn reintentar"> Reintentar</button>
+        </a>
+
+        <a href="/Home/Index">
+            <button class="btn menu"> Menú</button>
+        </a>
+
+        <a href="/Home/Ranking">
+            <button class="btn ranking"> Ranking</button>
+        </a>
+
+    </div>
+
+</div>
+
+<!-- AUDIO GAME OVER -->
+<audio autoplay>
+    <source src="https://www.soundjay.com/misc/sounds/fail-buzzer-02.mp3" type="audio/mpeg">
+</audio>
+
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        background: linear-gradient(135deg, black, #2b0000, red);
+        color: white;
+        text-align: center;
+        font-family: Arial, sans-serif;
+        overflow: hidden;
+    }
+
+    .gameover-container {
+        margin-top: 100px;
+        animation: aparecer 1s ease;
+    }
+
+    h1 {
+        font-size: 70px;
+        color: red;
+        text-shadow: 0 0 30px red, 0 0 60px darkred;
+        animation: parpadeo 1s infinite alternate;
+    }
+
+    .mensaje {
+        font-size: 22px;
+        margin-top: 10px;
+        color: #ccc;
+    }
+
+    .puntaje {
+        margin-top: 20px;
+        font-size: 30px;
+        color: gold;
+        text-shadow: 0 0 10px gold;
+    }
+
+    .botones {
+        margin-top: 40px;
+    }
+
+    .btn {
+        margin: 10px;
+        padding: 15px 30px;
+        font-size: 18px;
+        border: none;
+        border-radius: 12px;
+        cursor: pointer;
+        transition: 0.3s;
+        font-weight: bold;
+    }
+
+    .reintentar {
+        background: red;
+        color: white;
+    }
+
+    .menu {
+        background: cyan;
+        color: black;
+    }
+
+    .ranking {
+        background: gold;
+        color: black;
+    }
+
+    .btn:hover {
+        transform: scale(1.1);
+        box-shadow: 0 0 20px white;
+    }
+
+    /* ANIMACIONES */
+    @@keyframes aparecer {
+        from {
+            opacity: 0;
+            transform: translateY(-50px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @@keyframes parpadeo {
+        from { opacity: 1; }
+        to { opacity: 0.6; }
+    }
+</style>

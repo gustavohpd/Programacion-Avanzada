@@ -38,7 +38,7 @@ public class HomeController : Controller
                 vehiculos.Add(v);
             }
 
-            reader1.Close(); // 
+            reader1.Close(); 
 
             //  PISTAS
             string queryPistas = "SELECT IdPista, NombrePista, Dificultad FROM Pistas LIMIT 3";
@@ -55,7 +55,7 @@ public class HomeController : Controller
                 pistas.Add(p);
             }
 
-            reader2.Close(); // 
+            reader2.Close();  
         }
 
         ViewBag.Vehiculos = vehiculos;
@@ -63,6 +63,14 @@ public class HomeController : Controller
 
         return View();
     }
+
+    [HttpPost]
+    public ActionResult SeleccionarPista(int idPista)
+    {
+        Session["Pista"] = idPista;
+
+        return RedirectToAction("Gameplay");
+    }  
 
 
     [HttpPost]
@@ -86,7 +94,7 @@ public class HomeController : Controller
     }
     public ActionResult Gameplay()
     {
-        // opcional: proteger acceso
+        
         if (Session["Usuario"] == null)
             return RedirectToAction("Login", "Account");
 
@@ -102,17 +110,22 @@ public class HomeController : Controller
         {
             conn.Open();
 
-            //  1. Guardar en TURNOS (último juego)
-            string updateTurno = @"
-            UPDATE Turnos 
-            SET Puntaje = @Puntaje 
-            WHERE IdTurno = (
-                SELECT IdTurno FROM Turnos 
-                ORDER BY IdTurno DESC LIMIT 1
-            )";
+            
+            // 1. Obtener último turno
+            string getTurno = "SELECT IdTurno FROM Turnos ORDER BY IdTurno DESC LIMIT 1";
+            MySqlCommand cmdGet = new MySqlCommand(getTurno, conn);
 
+            int idTurno = Convert.ToInt32(cmdGet.ExecuteScalar());
+
+            // 2. Actualizar ese turno
+            string updateTurno = "UPDATE Turnos SET Puntaje = @Puntaje WHERE IdTurno = @IdTurno";
             MySqlCommand cmd1 = new MySqlCommand(updateTurno, conn);
+
             cmd1.Parameters.AddWithValue("@Puntaje", puntaje);
+            cmd1.Parameters.AddWithValue("@IdTurno", idTurno);
+
+            cmd1.ExecuteNonQuery();
+            
             cmd1.ExecuteNonQuery();
 
             //  2. Actualizar ranking
@@ -146,10 +159,27 @@ public class HomeController : Controller
                 cmd3.ExecuteNonQuery();
             }
         }
+        Session["UltimoPuntaje"] = puntaje;
 
 
 
         return Json(true);
+    }
+
+    public ActionResult Logout()
+    {
+        Session.Clear();     // borra datos
+        Session.Abandon();  // destruye sesión
+
+        return RedirectToAction("Index", "Home");
+    }
+
+    public ActionResult Victory(int puntaje, int monedas)
+    {
+        ViewBag.Puntaje = puntaje;
+        ViewBag.Monedas = monedas;
+
+        return View();
     }
 
     public ActionResult Ranking()

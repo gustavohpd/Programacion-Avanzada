@@ -1,0 +1,109 @@
+﻿@{
+    ViewBag.Title = "Victoria";
+}
+
+<h1 class="victory-title"> ¡VICTORIA!</h1>
+
+<div class="card-victory">
+
+    <h2> Terminaste la carrera</h2>
+
+    <h3>Puntaje: <span>@ViewBag.Puntaje</span></h3>
+    <h3> Monedas: <span>@ViewBag.Monedas</span></h3>
+
+    <div class="botones">
+
+        <a href="/Home/Index">
+            <button class="btn jugar">🔄 Volver a jugar</button>
+        </a>
+
+        <a href="/Home/Ranking">
+            <button class="btn ranking">🏆 Ver Ranking</button>
+        </a>
+
+        <a href="/Home/Logout">
+            <button class="btn logout">🔒 Cerrar sesión</button>
+        </a>
+
+    </div>
+
+</div>
+
+<style>
+    body {
+        background: linear-gradient(135deg, #000000, #1a1a1a);
+        color: white;
+        text-align: center;
+        font-family: 'Segoe UI', Tahoma;
+    }
+
+    .victory-title {
+        color: gold;
+        font-size: 60px;
+        margin-top: 30px;
+        text-shadow: 0 0 20px gold;
+        animation: glow 1.5s infinite alternate;
+    }
+
+    @@keyframes glow {
+        from { text-shadow: 0 0 10px gold; }
+        to { text-shadow: 0 0 30px yellow; }
+    }
+
+    .card-victory {
+        background: rgba(255,255,255,0.05);
+        border: 2px solid gold;
+        border-radius: 20px;
+        padding: 40px;
+        width: 400px;
+        margin: 50px auto;
+        box-shadow: 0 0 30px gold;
+        backdrop-filter: blur(10px);
+    }
+
+    .card-victory h2 {
+        margin-bottom: 20px;
+    }
+
+    .card-victory span {
+        color: cyan;
+        font-weight: bold;
+    }
+
+    .botones {
+        margin-top: 30px;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .btn {
+        padding: 15px;
+        border: none;
+        border-radius: 10px;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    .jugar {
+        background: lime;
+        color: black;
+    }
+
+    .ranking {
+        background: gold;
+        color: black;
+    }
+
+    .logout {
+        background: red;
+        color: white;
+    }
+
+    .btn:hover {
+        transform: scale(1.1);
+        box-shadow: 0 0 15px white;
+    }
+</style>
